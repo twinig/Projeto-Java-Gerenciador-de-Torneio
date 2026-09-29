@@ -20,42 +20,22 @@ public class Jogador {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getNick() {
         return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
     }
 
     public Funcao getFuncao() {
         return funcao;
     }
 
-    public void setFuncao(Funcao funcao) {
-        this.funcao = funcao;
-    }
-
     public ArrayList<Heroi> getHerois() {
         return herois;
-    }
-
-    public void setHerois(ArrayList<Heroi> herois) {
-        this.herois = herois;
     }
 
     public boolean isAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-    
     public void AdicionarMainHeroi(Heroi heroi){ 
         if(!herois.contains(heroi)){ //metodo da ArrayList que verifica se o objeto já existe na lista
             herois.add(heroi); //outro metodo da ArrayList que adiciona o objeto na lista
