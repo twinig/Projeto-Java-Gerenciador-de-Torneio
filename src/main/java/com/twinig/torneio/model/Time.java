@@ -80,6 +80,13 @@ public class Time {
     public String descricao() {
         return nome + " [Pontos: " + pontos + " pts ( " + jogadores.size() + " jogadores)]";
     }
+
+    public boolean inscrever(){
+        if(!composicaoCompletata()){
+            return false; //so aceita time se a composição estiver completa
+        }
+        return true;
+    }
 }
 
 
