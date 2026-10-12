@@ -1,5 +1,6 @@
 package com.twinig.torneio;
 
+import com.twinig.torneio.report.Relatorio;
 import com.twinig.torneio.model.*;
 import com.twinig.torneio.service.TorneioService;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class Main {
         mapas.add(new Mapa("King's Row", "Escolta"));
         mapas.add(new Mapa("Ilios", "Controle"));
         mapas.add(new Mapa("Hanamura", "Ataque"));
+        Relatorio relatorio = new Relatorio(torneio);
 
         int opcao = -1;
         while (opcao != 0) {
@@ -29,6 +31,8 @@ public class Main {
             System.out.println("8 - Agendar Partida");
             System.out.println("9 - Registrar resultado de Partida");
             System.out.println("10 - Listar Partidas");
+            System.out.println("11 - Relatórios");
+            System.out.println("12 - Registrar desempenho de Jogador");
 
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
@@ -135,68 +139,154 @@ public class Main {
                     }
                     break;
 
-                case 8: 
-                    System.out.println("ID da partida: "); 
+                case 8:
+                    System.out.println("ID da partida: ");
                     String idPartida = scanner.nextLine();
                     System.out.println("ID do time A: ");
                     Time timeA = service.consultarTime(scanner.nextLine());
-                    System.out.println("ID do time B: "); 
-                    Time timeB = service.consultarTime(scanner.nextLine()); //pede os IDs da partida e dos times, o scanner le o que é digitado
-                    //e é entregue a funcao de consultarTime, que devolve o time correspondente
-                    if(timeA == null || timeB == null || timeA == timeB){
+                    System.out.println("ID do time B: ");
+                    Time timeB = service.consultarTime(scanner.nextLine()); // pede os IDs da partida e dos times, o
+                                                                            // scanner le o que é digitado
+                    // e é entregue a funcao de consultarTime, que devolve o time correspondente
+                    if (timeA == null || timeB == null || timeA == timeB) {
                         System.out.println("Times invalidos");
-                        break; //ou null ou se for igual, volta invalido
+                        break; // ou null ou se for igual, volta invalido
                     }
-                    if(!timeA.composicaoCompletata() || !timeB.composicaoCompletata()){
+                    if (!timeA.composicaoCompletata() || !timeB.composicaoCompletata()) {
                         System.out.println("Os dois times precisam ter 5 jogadores.");
                         break;
                     }
 
                     System.out.println("Mapas:");
-                    for(int i = 0; i < mapas.size(); i++){
-                        System.out.println(" - " + mapas.get(i).descricao()); //percorre a array dos mapas, escolhe o mapa com get(i), o index do mapa
+                    for (int i = 0; i < mapas.size(); i++) {
+                        System.out.println(" - " + mapas.get(i).descricao()); // percorre a array dos mapas, escolhe o
+                                                                              // mapa com get(i), o index do mapa
                     }
                     System.out.println("Numero do mapa: ");
-                    int indiceMapa = Integer.parseInt(scanner.nextLine()); //devolve o texto em string, Integer sendo uma classe do java que trabalha com numeros inteiros
-                    //parseInt converte texto para int, transforma "2" para int 2
-                    System.out.println("Ano-Mês-diaTHora:Minuto"); //2026-10-12T20:00 ex
-                    try { //tudo dentro do try é tentado uma vez, se der erro, o java pula para o catch em vez de dar break
-                        LocalDateTime dataHora = LocalDateTime.parse(scanner.nextLine()); //novamente, pega o texto digitado e converte para o objeto LocalDateTime
-                        Partida novaPartida = new Partida(idPartida, dataHora, mapas.get(indiceMapa), timeA, timeB); //cria objeto partida
-                        if(service.agendarPartida(novaPartida)) { //devolve true ou false, se der false, deu conflito na data
+                    int indiceMapa = Integer.parseInt(scanner.nextLine()); // devolve o texto em string, Integer sendo
+                                                                           // uma classe do java que trabalha com
+                                                                           // numeros inteiros
+                    // parseInt converte texto para int, transforma "2" para int 2
+                    System.out.println("Ano-Mês-diaTHora:Minuto"); // 2026-10-12T20:00 ex
+                    try { // tudo dentro do try é tentado uma vez, se der erro, o java pula para o catch
+                          // em vez de dar break
+                        LocalDateTime dataHora = LocalDateTime.parse(scanner.nextLine()); // novamente, pega o texto
+                                                                                          // digitado e converte para o
+                                                                                          // objeto LocalDateTime
+                        Partida novaPartida = new Partida(idPartida, dataHora, mapas.get(indiceMapa), timeA, timeB); // cria
+                                                                                                                     // objeto
+                                                                                                                     // partida
+                        if (service.agendarPartida(novaPartida)) { // devolve true ou false, se der false, deu conflito
+                                                                   // na data
                             System.out.println("Partida agendada.");
-                        }
-                        else {
+                        } else {
                             System.out.println("Conflito: Times ja jogam esse horario");
                         }
-                    } catch(Exception e){ //aqui, caso tenha erro, cobre data, numero do mapa ou se nao houver mapa
+                    } catch (Exception e) { // aqui, caso tenha erro, cobre data, numero do mapa ou se nao houver mapa
                         System.out.println("Data ou mapa invalido.");
                     }
                     break;
 
-                case 9: 
-                    System.out.println("ID da partida:"); 
-                    String  idPartidasRes = scanner.nextLine();
+                case 9:
+                    System.out.println("ID da partida:");
+                    String idPartidasRes = scanner.nextLine();
                     System.out.println("ID do time vencedor");
-                    String idVencedor = scanner.nextLine(); //le os dois ids, e chama o registrarResultado do service
-                    if(service.registrarResultado(idPartidasRes, idVencedor)){ //usei PartidaRes pq dentro do switch inteiro, todas as variaveis do case ocupam o msm espaço, caso tenha outro idPartida, pode dar variavel duplicada
+                    String idVencedor = scanner.nextLine(); // le os dois ids, e chama o registrarResultado do service
+                    if (service.registrarResultado(idPartidasRes, idVencedor)) { // usei PartidaRes pq dentro do switch
+                                                                                 // inteiro, todas as variaveis do case
+                                                                                 // ocupam o msm espaço, caso tenha
+                                                                                 // outro idPartida, pode dar variavel
+                                                                                 // duplicada
                         System.out.println("Resultado registrado.");
-                    }
-                    else {
+                    } else {
                         System.out.println("Nao foi possivel (Partida inexistente ou ja finalizada)");
                     }
                     break;
 
-                case 10: //simplismente lista as partidas
-                    for(Partida p : service.listaPartidas()){ //percorre todas as partidas e imprime o id
+                case 10: // simplismente lista as partidas
+                    for (Partida p : service.listaPartidas()) { // percorre todas as partidas e imprime o id
                         System.out.println(" - " + p.descricao());
                     }
                     break;
 
+                case 11:
+                    System.out.println("--- RELATÓRIOS --- ");
+                    System.out.println("Média de pontos por time: " + relatorio.mediaPontosPorTime());
+                    System.out.println("Partidas finalizadas: " + relatorio.totalPartidasFinalizadas());
+                    System.out.println("% Finalizadas: " + relatorio.percentualFinalizadas());
+
+                    Time lider = relatorio.timeComMaisPontos();
+                    if (lider != null) { //time com mais pontos retorna null se nao há times, caso contrario, vai retornar o lider + descrição dele
+                        System.out.println("LIDER: " + lider.descricao());
+                    }
+
+                    System.out.println("Ranking:");
+                    int pos = 1;
+                    for (Time t : relatorio.ranking()) {
+                        System.out.println(pos + "º - " + t.descricao());
+                        pos++;
+                    }
+
+                    RegistroDesempenho melhor = relatorio.melhorKDA();
+                    if(melhor != null){
+                        System.out.println("Melhor KDA: " + melhor.descricao() + "( KDA " + melhor.calcularKDA() + ")");
+                    }
+                    else {
+                        System.out.println("Nenhum desempenho registrado ainda.");
+                    }
+                    break;
+
+                case 12: 
+                    System.out.println("ID da partida: ");
+                    Partida partidaReg = service.consultarPartida(scanner.nextLine());
+                    if(partidaReg == null){
+                        System.out.println("Partida não encontrada");
+                        break;
+                    }
+                    System.out.println("Nick do jogador: ");
+                    String nickReg = scanner.nextLine();
+                    Jogador jogadorReg = null; //começa com a variavel vazia
+                    for(Jogador j : partidaReg.getTimeA().getJogadores()){
+                        if (j.getNick().equalsIgnoreCase(nickReg)){ //equalsIgnoreCase compara textos IGNORANDO maiusculas e minusculas, 
+                            jogadorReg = j;
+                        }
+                    }
+                    for (Jogador j : partidaReg.getTimeB().getJogadores()){
+                        if(j.getNick().equalsIgnoreCase(nickReg)){ //mesmo coisa aq pro time B
+                            jogadorReg = j;
+                        }
+                    }
+                    if(jogadorReg == null){
+                        System.out.println("Jogador não participa dessa partida");
+                        break;
+                    }
+                    System.out.println("Herói: ");
+                    String nomeHeroi = scanner.nextLine();
+                    Heroi heroiReg = new Heroi(nomeHeroi, jogadorReg.getFuncao());
+                    try {
+                        System.out.println("Eliminações: ");
+                        int el = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Mortes: ");
+                        int mo = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Assistências: ");
+                        int asst = Integer.parseInt(scanner.nextLine());
+                        RegistroDesempenho reg = new RegistroDesempenho(jogadorReg, heroiReg); //cria o desempenho
+                        reg.registrarEstatisticas(el, mo, asst); // e guarda
+                        if(partidaReg.adicionarRegistro(reg)){
+                            System.out.println("Desempenho registrado.");
+                        }
+                        else {
+                            System.out.println("Heroi repetido no mesmo time");
+                        }
+                    } catch (NumberFormatException e ){  //Integer.parseInt("abc") lança NumberFormatException
+                        System.out.println("Digite apenas numeros.");
+                    }
+                    break;
 
                 case 0:
                     System.out.println("Encerrando...");
                     break;
+                    
                 default:
                     System.out.println("Opção inválida.");
             }
