@@ -51,7 +51,7 @@ public class RegistroDesempenho {
     public String descricao(){
         return jogador.getNick() + " [ " + heroiUsado.getNome() + " - " + kills + "/" + deaths + "/" + assists + " - KDA: " + String.format("%.2f", calcularKDA()) + " ]";
     }
-
+    
     
 
 }

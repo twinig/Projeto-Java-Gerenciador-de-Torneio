@@ -80,4 +80,32 @@ public class TorneioService {
         return torneio.timeComMaisPontos(); //repassa APENAS o time com mais pontos
     }
 
+    public Partida consultarPartida(String id){ //msm coisa do consultarTime, percorre os ids das partidas
+        for(Partida p : torneio.getPartidas()){
+            if(p.getId().equals(id)){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Partida> listaPartidas(){
+        return torneio.getPartidas(); //lista a lista de partidas
+    }
+
+    public boolean registrarResultado(String idPartida, String idVencedor){
+        Partida partida = consultarPartida(idPartida);
+        Time vencedor = consultarTime(idVencedor);
+        if(partida == null || vencedor == null){
+            return false;
+        }
+        if(partida.isFinalizada() || !partida.envolveTime(vencedor)){
+            return false;
+        }
+        partida.registrarResultado(vencedor);
+        return true;
+    }
+
+
+
 }
