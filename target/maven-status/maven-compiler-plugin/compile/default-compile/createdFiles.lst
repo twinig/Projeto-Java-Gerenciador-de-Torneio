@@ -1,0 +1,11 @@
+com/twinig/torneio/model/Partida.class
+com/twinig/torneio/model/Heroi.class
+com/twinig/torneio/model/Time.class
+com/twinig/torneio/model/Torneio.class
+com/twinig/torneio/model/Jogador.class
+com/twinig/torneio/service/TorneioService.class
+com/twinig/torneio/Main.class
+com/twinig/torneio/model/Funcao.class
+com/twinig/torneio/report/Relatorio.class
+com/twinig/torneio/model/Mapa.class
+com/twinig/torneio/model/RegistroDesempenho.class

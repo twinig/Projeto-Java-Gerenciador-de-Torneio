@@ -45,7 +45,7 @@ public class RegistroDesempenho {
         if(deaths == 0){ //denominador nao pode ser 0 ne rapeize
             return kills + assists;
         }
-        return (double)(kills + assists) / deaths;
+        return (double) (kills + assists) / deaths;
     }
 
     public String descricao(){
