@@ -6,17 +6,18 @@ import com.twinig.torneio.service.TorneioService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+import com.twinig.torneio.api.OverFastClient;
 
 public class Main {
     public static void main(String[] args) {
         Torneio torneio = new Torneio("Copa Overwatch");
         TorneioService service = new TorneioService(torneio);
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Mapa> mapas = new ArrayList<>();
-        mapas.add(new Mapa("King's Row", "Escolta"));
-        mapas.add(new Mapa("Ilios", "Controle"));
-        mapas.add(new Mapa("Hanamura", "Ataque"));
         Relatorio relatorio = new Relatorio(torneio);
+        OverFastClient api = new OverFastClient();
+        ArrayList<Mapa> mapas = api.carregarMapas();
+        ArrayList<Heroi> herois = api.carregarHerois();
+        System.out.println(herois.size() + " heróis e " + mapas.size() + " mapas carregados.");
 
         int opcao = -1;
         while (opcao != 0) {
@@ -216,7 +217,8 @@ public class Main {
                     System.out.println("% Finalizadas: " + relatorio.percentualFinalizadas());
 
                     Time lider = relatorio.timeComMaisPontos();
-                    if (lider != null) { //time com mais pontos retorna null se nao há times, caso contrario, vai retornar o lider + descrição dele
+                    if (lider != null) { // time com mais pontos retorna null se nao há times, caso contrario, vai
+                                         // retornar o lider + descrição dele
                         System.out.println("LIDER: " + lider.descricao());
                     }
 
@@ -228,65 +230,80 @@ public class Main {
                     }
 
                     RegistroDesempenho melhor = relatorio.melhorKDA();
-                    if(melhor != null){
+                    if (melhor != null) {
                         System.out.println("Melhor KDA: " + melhor.descricao() + "( KDA " + melhor.calcularKDA() + ")");
-                    }
-                    else {
+                    } else {
                         System.out.println("Nenhum desempenho registrado ainda.");
                     }
                     break;
 
-                case 12: 
-                    System.out.println("ID da partida: ");
+                case 12:
+                    System.out.print("ID da partida: ");
                     Partida partidaReg = service.consultarPartida(scanner.nextLine());
-                    if(partidaReg == null){
-                        System.out.println("Partida não encontrada");
+                    if (partidaReg == null) {
+                        System.out.println("Partida não encontrada.");
                         break;
                     }
-                    System.out.println("Nick do jogador: ");
+                    System.out.print("Nick do jogador: ");
                     String nickReg = scanner.nextLine();
-                    Jogador jogadorReg = null; //começa com a variavel vazia
-                    for(Jogador j : partidaReg.getTimeA().getJogadores()){
-                        if (j.getNick().equalsIgnoreCase(nickReg)){ //equalsIgnoreCase compara textos IGNORANDO maiusculas e minusculas, 
+                    Jogador jogadorReg = null;
+                    for (Jogador j : partidaReg.getTimeA().getJogadores()) {
+                        if (j.getNick().equalsIgnoreCase(nickReg)) {
                             jogadorReg = j;
                         }
                     }
-                    for (Jogador j : partidaReg.getTimeB().getJogadores()){
-                        if(j.getNick().equalsIgnoreCase(nickReg)){ //mesmo coisa aq pro time B
+                    for (Jogador j : partidaReg.getTimeB().getJogadores()) {
+                        if (j.getNick().equalsIgnoreCase(nickReg)) {
                             jogadorReg = j;
                         }
                     }
-                    if(jogadorReg == null){
-                        System.out.println("Jogador não participa dessa partida");
+                    if (jogadorReg == null) {
+                        System.out.println("Jogador não participa dessa partida.");
                         break;
                     }
-                    System.out.println("Herói: ");
-                    String nomeHeroi = scanner.nextLine();
-                    Heroi heroiReg = new Heroi(nomeHeroi, jogadorReg.getFuncao());
+
+                    ArrayList<Heroi> opcoes = new ArrayList<>();
+                    for (Heroi h : herois) {
+                        if (h.getFuncao() == jogadorReg.getFuncao()) {
+                            opcoes.add(h);
+                        }
+                    }
+                    System.out.println("Heróis disponíveis para " + jogadorReg.getFuncao() + ":");
+                    for (int i = 0; i < opcoes.size(); i++) {
+                        System.out.println(i + " - " + opcoes.get(i).getNome());
+                    }
+
                     try {
-                        System.out.println("Eliminações: ");
+                        System.out.print("Número do herói: ");
+                        Heroi heroiReg = opcoes.get(Integer.parseInt(scanner.nextLine()));
+                        System.out.print("Eliminações: ");
                         int el = Integer.parseInt(scanner.nextLine());
-                        System.out.println("Mortes: ");
+                        System.out.print("Mortes: ");
                         int mo = Integer.parseInt(scanner.nextLine());
-                        System.out.println("Assistências: ");
+                        System.out.print("Assistências: ");
                         int asst = Integer.parseInt(scanner.nextLine());
-                        RegistroDesempenho reg = new RegistroDesempenho(jogadorReg, heroiReg); //cria o desempenho
-                        reg.registrarEstatisticas(el, mo, asst); // e guarda
-                        if(partidaReg.adicionarRegistro(reg)){
+
+                        RegistroDesempenho reg = new RegistroDesempenho(jogadorReg, heroiReg);
+                        reg.registrarEstatisticas(el, mo, asst);
+                        if (partidaReg.adicionarRegistro(reg)) {
                             System.out.println("Desempenho registrado.");
+                        } else {
+                            System.out.println("Herói repetido no mesmo time nessa partida.");
                         }
-                        else {
-                            System.out.println("Heroi repetido no mesmo time");
-                        }
-                    } catch (NumberFormatException e ){  //Integer.parseInt("abc") lança NumberFormatException
-                        System.out.println("Digite apenas numeros.");
+                    } catch (Exception e) {
+                        System.out.println("Entrada inválida.");
                     }
                     break;
 
+                case 13: 
+                    for(Heroi h : herois) {
+                        System.out.println(h.descricao());
+                    }
+                    break;
                 case 0:
                     System.out.println("Encerrando...");
                     break;
-                    
+
                 default:
                     System.out.println("Opção inválida.");
             }

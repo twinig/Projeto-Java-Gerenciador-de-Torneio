@@ -61,7 +61,7 @@ public class OverFastClient { // O OverFastClient tras uma lista que seja, da in
         }
     }
 
-    public ArrayList<Mapa> carregarMapa() { //merma coisa
+    public ArrayList<Mapa> carregarMapas() { //merma coisa
         try {
             return lerMapas(buscar("/maps"));
         } catch (Exception e) {
@@ -73,42 +73,42 @@ public class OverFastClient { // O OverFastClient tras uma lista que seja, da in
     public ArrayList<Heroi> lerHerois(String json){
         ArrayList<Heroi> herois = new ArrayList<>(); //cria uma lista vazia onde os herois vao entrar
         JsonArray lista = JsonParser.parseString(json).getAsJsonArray(); //transforma o texto em uma lista JSON que o java consegue percorrer, o .parseString transforma o texto da API da internet, do formato JSON para objeto
-        for(JsonElement item : lista){
-            JsonObject obj = item.getAsJsonObject();
-            String nome = obj.get("name").getAsString();
-            Funcao funcao = converterFuncao(obj.get("role").getAsString());
-            herois.add(new Heroi(nome, funcao));
+        for(JsonElement item : lista){ //percorre cada item da lista da classe JsonElement(Classe abstrata, que tem os objetos de Json)
+            JsonObject obj = item.getAsJsonObject(); //pega o JsonElement como Object e devolve para conseguir pegar os elementos de JSON
+            String nome = obj.get("name").getAsString(); //pega um valor de String do JSONelement e extrai como puro String, definindo em nome
+            Funcao funcao = converterFuncao(obj.get("role").getAsString()); //msm idea, mas chama o metodo converterFuncao para reconhecer a funcao 
+            herois.add(new Heroi(nome, funcao)); //apenas cria um novo objeto heroi e adiciona na array de herois com nome e e funcao
         }
         return herois;
     }
 
-    public ArrayList<Mapa> lerMapas(String json) {
-        ArrayList<Mapa> mapas = new ArrayList<>();
-        JsonArray lista = JsonParser.parseString(json).getAsJsonArray();
-        for (JsonElement item : lista) {
+    public ArrayList<Mapa> lerMapas(String json) { //Declara a String json e retornando objetos mapas
+        ArrayList<Mapa> mapas = new ArrayList<>(); //cria uma Array nova 
+        JsonArray lista = JsonParser.parseString(json).getAsJsonArray(); //novamente, le o txt em JSON e cria a a arvore para Json object pegando a API, devolvendo uma lista
+        for (JsonElement item : lista) { 
             JsonObject obj = item.getAsJsonObject();
-            String nome = obj.get("name").getAsString();
+            String nome = obj.get("name").getAsString(); 
 
-            String modos = "";
-            JsonArray gamemodes = obj.getAsJsonArray("gamemodes");
-            if (gamemodes != null) {
+            String modos = ""; //Inicia uma string vazia
+            JsonArray gamemodes = obj.getAsJsonArray("gamemodes"); //le o campo gamemodes em JSON 
+            if (gamemodes != null) { //so itera se a array existir
                 for (int i = 0; i < gamemodes.size(); i++) {
                     if (i > 0) {
-                        modos += ", ";
+                        modos += ", "; //apenas insere uma virgula para ficar um padrao dos gamemodes quando nao for o primeiro
                     }
-                    modos += gamemodes.get(i).getAsString();
+                    modos += gamemodes.get(i).getAsString(); //pega o elemento na posição i como JsonElement, extrai o texto como String e soma na string modos
                 }
             }
-            if (modos.equals("workshop") || modos.equals("pratice-range")) {
+            if (modos.equals("workshop") || modos.equals("practice-range")) { // 
                 continue;
             }
-            mapas.add(new Mapa(nome, modos));
+            mapas.add(new Mapa(nome, modos)); //dito isso, cria novo mapa com o nome e modos
         }
         return mapas;
     }
 
     private Funcao converterFuncao(String role) {
-        if (role.equalsIgnoreCase("tank")) {
+        if (role.equalsIgnoreCase("tank")) { //a Api chama tank em minusculo, e retornamos a funcao.TANK, a msm coisa de support
             return Funcao.TANK;
         }
         if (role.equalsIgnoreCase("support")) {
