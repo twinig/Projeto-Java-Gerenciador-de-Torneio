@@ -1,4 +1,5 @@
-# Projeto-Java-Gerenciador-de-Torneio
+# Projeto Gerenciador de Torneio de Overwatch amador
+
 Projeto livre de Sistema de gerenciamento e Analise, focado na API OverFast com tema do jogo Overwatch, organizador de torneios amadores  de Overwatch
 
 É um sistema em java, executado a partir de terminal para organizar torneios amadores de Overwatch: Contém cadastro de time e jogadores, agendamento de partidas, registro de resultados e desempenho, classificação e relatórios.
