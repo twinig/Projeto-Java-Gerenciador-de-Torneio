@@ -34,6 +34,9 @@ public class Main {
             System.out.println("10 - Listar Partidas");
             System.out.println("11 - Relatórios");
             System.out.println("12 - Registrar desempenho de Jogador");
+            System.out.println("13 - Listar heróis (API)");
+            System.out.println("14 - Consultar time");
+            System.out.println("15 - Desativar time");
 
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
@@ -295,9 +298,33 @@ public class Main {
                     }
                     break;
 
-                case 13: 
-                    for(Heroi h : herois) {
+                case 13:
+                    for (Heroi h : herois) {
                         System.out.println(h.descricao());
+                    }
+                    break;
+
+                case 14:
+                    System.out.print("ID do time: ");
+                    String idConsulta = scanner.nextLine();
+                    Time timeConsultado = service.consultarTime(idConsulta);
+                    if (timeConsultado == null) {
+                        System.out.println("Time não encontrado.");
+                    } else {
+                        System.out.println(timeConsultado.descricao());
+                        for (Jogador jogadorDoTime : timeConsultado.getJogadores()) {
+                            System.out.println(" - " + jogadorDoTime.descricao());
+                        }
+                    }
+                    break;
+
+                case 15:
+                    System.out.print("ID do time a desativar: ");
+                    String idDesativar = scanner.nextLine();
+                    if (service.desativarTime(idDesativar)) {
+                        System.out.println("Time desativado.");
+                    } else {
+                        System.out.println("Time não encontrado.");
                     }
                     break;
                 case 0:

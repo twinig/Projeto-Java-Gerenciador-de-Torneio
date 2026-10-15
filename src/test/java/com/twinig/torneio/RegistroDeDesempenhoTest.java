@@ -1,7 +1,6 @@
 package com.twinig.torneio;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 import com.twinig.torneio.model.Funcao;
 import com.twinig.torneio.model.Heroi;
 import com.twinig.torneio.model.Jogador;
