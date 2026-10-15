@@ -275,9 +275,8 @@ Os testes JUnit verificam as regras de negócio:
 
 | Ferramenta | Objetivo | Resumo do uso | Revisão pelo Dev |
 |---|---|---|---|
-| Claude Sonnet 5.5 | Código Base e Regras de Negócio | Apoiou a definição da arquitetura inicial do código base (camadas model, service, report e api), a modelagem das classes e relacionamentos e a lógica das regras de negócio. | Testes unitários e manuais das regras, validação dos casos de borda (time cheio, herói repetido, conflito de horário, divisão por zero no KDA), correção de erros de compilação e anotação do código para compreensão. |
+| Claude Sonnet 5.5 | Código Base e Regras de Negócio | Testes unitários e manuais das regras, validação dos casos de borda (time cheio, herói repetido, conflito de horário, divisão por zero no KDA), correção de erros de compilação e anotação do código para compreensão. |
 | Claude Sonnet 5.5 | Integração com API e Testes | Auxiliou na estrutura do cliente HTTP, na conversão do JSON com Gson, no plano de contingência sem internet e na criação dos testes JUnit. | Conferência dos campos reais retornados pela API, execução dos testes e ajuste dos nomes de métodos e dados. |
-| Claude Sonnet 5.5 | Documentação e README | Auxiliou na estruturação e na redação inicial do `README.md` e dos guias de instalação e execução. | Validação dos comandos de instalação e execução, conferência das regras descritas contra o código e ajustes na clareza do texto. |
 
 ---
 
