@@ -74,19 +74,19 @@ public class Torneio {
     public int i, j;
 
 
-    public ArrayList<Time> gerarRanking() { //bubble sort 
-        ArrayList<Time> ranking = new ArrayList<>(times); //cria uma copia da lista de times para não alterar a lista original
-        for(i = 0; i < ranking.size() - 1; i++) { //laço externo para percorrer a lista de times
-            for(j = 0; j < ranking.size() - i - 1; j++) { //laço interno para percorrer a lista de times e comparar os pontos dos times
-                if(ranking.get(j).getPontos() < ranking.get(j + 1).getPontos()) { //compara o time atual da posição j com o time da posição j + 1, se o time da posição j tiver menos pontos que o time da posição j + 1, troca os times de posição
-                    Time temp = ranking.get(j);
-                    ranking.set(j, ranking.get(j + 1));
-                    ranking.set(j + 1, temp);
+        public ArrayList<Time> gerarRanking() { //bubble sort 
+            ArrayList<Time> ranking = new ArrayList<>(times); //cria uma copia da lista de times para não alterar a lista original
+            for(int i = 0; i < ranking.size() - 1; i++) { //laço externo para percorrer a lista de times
+                for(int j = 0; j < ranking.size() - i - 1; j++) { //laço interno para percorrer a lista de times e comparar os pontos dos times
+                    if(ranking.get(j).getPontos() < ranking.get(j + 1).getPontos()) { //compara o time atual da posição j com o time da posição j + 1, se o time da posição j tiver menos pontos que o time da posição j + 1, troca os times de posição
+                        Time temp = ranking.get(j);
+                        ranking.set(j, ranking.get(j + 1));
+                        ranking.set(j + 1, temp);
+                    }
                 }
             }
+            return ranking;
         }
-        return ranking;
-    }
 
     public void encerrar() {
         this.encerrado = true;
